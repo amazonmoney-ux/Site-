@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AmazonMoney - Investimento</title>
+    <title>AmazonMoney - Plataforma de Investimento</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -1816,7 +1816,7 @@ Vá embaixo e registe o depósito.</p>
                             <p><strong>Informações importantes:</strong></p>
                             <ul style="margin-left: 20px; margin-top: 10px;">
                                 <li>Valor mínimo para levantamento: 100 MT</li>
-                                <li>Taxa de processamento: 5 MT por transação</li>
+                                <li>Taxa de processamento: 5 MT per transação</li>
                                 <li>Processamento em até 24 horas</li>
                                 <li>Certifique-se que o número M-Pesa está correto</li>
                                 <li>O PIN é necessário para autorizar a transação</li>
@@ -2139,7 +2139,7 @@ Vá embaixo e registe o depósito.</p>
             
             // Abrir WhatsApp para suporte
             openWhatsApp() {
-                const phoneNumber = "25884 6678415";
+                const phoneNumber = "258846678415";
                 const message = "Olá! Preciso de ajuda com a Amazon Money.";
                 const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(url, '_blank');
@@ -2157,13 +2157,13 @@ Vá embaixo e registe o depósito.</p>
                 if (!this.currentUser) return;
                 
                 const referralCode = this.currentUser.referralCode;
-                const message = `💸 *Amazon Money* - Ganhe 2MT por cadastro!\n\n` +
+                const message = ` *Amazon Money* - Ganhe 2MT por cadastro!\n\n` +
                                `Registe-se usando meu código de referência: *${referralCode}*\n\n` +
                                `✅ Ganhe 2MT de bónus no registo\n` +
                                `✅ 5 minutos de visualização = 0.10MT\n` +
                                `✅ Investimentos com retorno garantido\n` +
                                `✅ Levantamentos rápidos via M-Pesa\n\n` +
-                               `🔗 ${window.location.href.split('?')[0]}?ref=${referralCode}`;
+                               ` ${window.location.href.split('?')[0]}?ref=${referralCode}`;
                 
                 const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
                 window.open(url, '_blank');
@@ -2281,7 +2281,7 @@ Vá embaixo e registe o depósito.</p>
                 }
             }
             
-            // Verificar e processar lucros de mineração diária
+            // MODIFICAÇÃO: Verificar e processar lucros de mineração diária - AGORA CAI NO SALDO PRINCIPAL
             checkDailyMiningProfits() {
                 if (!this.currentUser.miningMachines || this.currentUser.miningMachines.length === 0) return;
                 
@@ -2304,15 +2304,15 @@ Vá embaixo e registe o depósito.</p>
                     }
                 });
                 
-                // Adicionar lucro diário ao saldo de mineração
+                // MODIFICAÇÃO: Adicionar lucro diário ao saldo PRINCIPAL (não ao de mineração)
                 if (totalDailyProfit > 0) {
-                    this.currentUser.wallet.mining += totalDailyProfit;
+                    this.currentUser.wallet.main += totalDailyProfit;
                     this.currentUser.transactions.push({
                         type: 'mining_daily',
                         amount: totalDailyProfit,
                         description: `Lucro diário de mineração`,
                         date: new Date().toISOString(),
-                        wallet: 'mining'
+                        wallet: 'main' // MODIFICAÇÃO: Agora vai para o saldo principal
                     });
                     
                     this.showNotification(`Recebeu ${totalDailyProfit} MT de lucro diário das suas máquinas de mineração!`, 'success');
@@ -3058,7 +3058,7 @@ Vá embaixo e registe o depósito.</p>
                 );
             }
             
-            // Coletar lucro da mineração
+            // MODIFICAÇÃO: Coletar lucro da mineração - AGORA CAI NO SALDO PRINCIPAL
             collectMiningProfit(machineIndex) {
                 if (!this.currentUser.miningMachines || !this.currentUser.miningMachines[machineIndex]) {
                     this.showNotification('Máquina não encontrada!', 'error');
@@ -3083,8 +3083,8 @@ Vá embaixo e registe o depósito.</p>
                     'Coletar Lucro de Mineração',
                     `Tem certeza que deseja coletar ${machine.return} MT de lucro da máquina ${machine.name}?`,
                     () => {
-                        // Adicionar lucro ao saldo de mineração
-                        this.currentUser.wallet.mining += machine.return;
+                        // MODIFICAÇÃO: Adicionar lucro ao saldo PRINCIPAL (não ao de mineração)
+                        this.currentUser.wallet.main += machine.return;
                         
                         // Registrar transação
                         this.currentUser.transactions.push({
@@ -3092,7 +3092,7 @@ Vá embaixo e registe o depósito.</p>
                             amount: machine.return,
                             description: `Lucro final de mineração: ${machine.name}`,
                             date: new Date().toISOString(),
-                            wallet: 'mining'
+                            wallet: 'main' // MODIFICAÇÃO: Agora vai para o saldo principal
                         });
                         
                         // Remover máquina da lista de ativas
@@ -3180,7 +3180,7 @@ Vá embaixo e registe o depósito.</p>
                 }
             }
             
-            // CORREÇÃO: Confirmar depósito com valor mínimo corrigido
+            // CORREÇÃO: Confirmar depósito com valor mínimo corrigido para 300 MT
             confirmDeposit() {
                 const amount = parseInt(document.getElementById('deposit-amount').value);
                 const txnId = document.getElementById('transaction-id').value;
@@ -3188,7 +3188,7 @@ Vá embaixo e registe o depósito.</p>
                 const depositAlert = document.getElementById('deposit-alert');
                 
                 // CORREÇÃO: Valor mínimo corrigido para 300
-                if (!amount || amount < 66584585) {
+                if (!amount || amount < 300) {
                     this.showAlert(depositAlert, 'O valor mínimo para depósito é 300 MT.', 'error');
                     return;
                 }
